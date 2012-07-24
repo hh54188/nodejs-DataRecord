@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.8.18.custom.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            var express = function () {
+                $.ajax({
+                    'type': 'get',
+                    'url': 'http://127.0.0.1:40492/',
+                    'success': function () {
+                        console.log('success');
+                    }
+                })
+            }
+            $('button').click(function () {
+                express();
+            });
+        });
+    </script>
+</head>
+<body>
+    <button>ajax</button>
+</body>
+</html>
