@@ -17,6 +17,7 @@
                     'url': '/',
                     'data': JSON.stringify(data),
                     'cache': false,
+                    'timeout': 3000,
                     'contentType': "application/json",
                     'success': function () {
                         console.log('success');
@@ -31,6 +32,11 @@
     </script>
 </head>
 <body>
+    <form action="/" method="post">
+        <input type="text" name="city">
+        <input type="text" name="name">
+        <input type="submit" value="submit">
+    </form>
     <button>ajax</button>
 </body>
 </html>
