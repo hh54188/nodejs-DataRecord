@@ -7,14 +7,23 @@
     <script type="text/javascript">
         $(function(){
             var express = function () {
+                var data = {
+                    'name': 'lee',
+                    'city': 'beijing'
+                }
+
                 $.ajax({
-                    'type': 'get',
-                    'url': 'http://127.0.0.1:40492/',
+                    'type': 'post',
+                    'url': '/',
+                    'data': JSON.stringify(data),
+                    'cache': false,
+                    'contentType': "application/json",
                     'success': function () {
                         console.log('success');
                     }
                 })
             }
+
             $('button').click(function () {
                 express();
             });

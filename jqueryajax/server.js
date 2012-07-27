@@ -2,20 +2,22 @@ var express = require('express');
 var app = express.createServer();
 app.configure(function () {
 	app.use(express.static(__dirname + '/static'));
+	// app.use(express.logger());
+	// app.use(app.router);
+	app.use(express.bodyParser());
 })
 
-// app.use(express.logger());
-// app.use(app.router);
-// app.use(express.bodyParser());
+
 
 
 app.get('/', function(req, res){
     res.send('Hello World');
 });
 
-// app.post('/', function(req, res){
-//   res.send(req.body);
-// });
+app.post('/', function(req, res){
+	console.log('body:', req.body);
+	res.send(req.body);
+});
 
 
 // var callback = function (req, res, next) {
