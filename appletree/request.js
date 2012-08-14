@@ -28,4 +28,8 @@ var req = http.request(opts, function (res) {
   	})
 })
 
+req.on('error', function(e) {
+  console.log('problem with request: ' + e.message);
+});
+
 req.end();
