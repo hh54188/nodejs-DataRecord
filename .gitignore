@@ -1,3 +1,2 @@
-*.log
+appletree/server/file
 .DS_Store
-log/*

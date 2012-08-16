@@ -1,6 +1,7 @@
 
 var xml2js = require('xml2js');
 var parser = new xml2js.Parser();
+var file = require('./file.js');
 
 //toJson
 var toJSON = function (data, filter) {
@@ -27,26 +28,33 @@ var isAllow = function (key, list) {
 
 //filter 
 var filterData = function (data) {
-	var whiteKey = ['title_sc', 'ftitle_sc', 'Age', 'RmbPrice', 'FileSize', 'DownLoad', 'PublisherSC', 'CategorySC'];
-	var books = data.book;
-	var filterData = {};
+	var bookKey = ['title_sc', 'ftitle_sc', 'AppDescSC', 'Age', 'Category', 'PublisherSC', 'CategorySC', 'InAppSmallCoverSC', 'ReviewPhoto1', 'FileSize', 'InAppProID'];
+	var detailKey = ['BuyPoint', 'Price', 'RmbPrice', 'DownLoad', 'HasBought']
+	var remoteBooks = data.book;
+	var localBooks = {};
+	var detail = {};
 
-	var d = new Date();
-	d = d.getFullYear().toString() + d.getHours().toString() + d.getMinutes().toString();
-	filterData["timestamp"] = d;
-
-	filterData["books"] = {};
-	for (var i = 0; i < books.length; i++) {
-		var book = {};
-		for (var p in books[i]) {
-			if (isAllow(p, whiteKey)) {
-				book[p] = books[i][p];
+	for (var b = 0; b < remoteBooks.length; b++) {
+		var id = remoteBooks[b].id;
+		localBooks[id] = {};
+		detail[id] = {};
+		for (var p in remoteBooks[b]) {
+			//书的基本信息
+			if (isAllow(p, bookKey)) {
+				localBooks[id][p] = remoteBooks[b][p];
 			}
-		}
-		filterData.books[books[i]["id"]] = book;
+			//书的当日信息
+			if (isAllow(p, detailKey)) {
+				detail[id][p] = remoteBooks[b][p];
+			}
+
+			var timestamp = new Date();
+			timestamp = timestamp.getFullYear().toString() + '-' + timestamp.getMonth().toString() + '-' + timestamp.getDay().toString();
+			detail[id]["timestamp"] = timestamp;
+		}		
 	}
 
-	console.log(filterData);
+	file.getBookList(localBooks, detail);
 }
 
 exports.toJSON = toJSON;
