@@ -49,7 +49,7 @@ var filterData = function (data) {
 			}
 
 			var timestamp = new Date();
-			timestamp = timestamp.getFullYear().toString() + '-' + timestamp.getMonth().toString() + '-' + timestamp.getDay().toString();
+			timestamp = timestamp.getFullYear().toString() + '-' + (parseInt(timestamp.getMonth()) + 1).toString() + '-' + timestamp.getDate().toString();
 			detail[id]["timestamp"] = timestamp;
 		}		
 	}

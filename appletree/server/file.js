@@ -28,6 +28,22 @@ var checkIdInList = function (books, list) {
 	writeToFile('booklist', list);
 }
 
+var readFile = function (id, fn) {
+	var filePath = 'file/' + id + '.js';
+	fs.exists(filePath, function (exists) {
+		if (exists) {
+			fs.readFile(filePath, 'utf8', function (err, data) {
+				if (err) {return console.log(err);}
+				data = JSON.parse(data);
+				//回调函数
+				if (fn) {
+					fn(data)
+				}
+			})
+		}
+	})
+}
+
 var getBookDetail = function (id, d) {
 	var filePath = 'file/' + id + '.js';
 	fs.exists(filePath, function (exists) {
@@ -41,12 +57,12 @@ var getBookDetail = function (id, d) {
 				if (err) {return console.log(err);}
 				data = JSON.parse(data);
 				var last = data[data.length - 1];
-
 				var timestamp = last.timestamp;
 				if (timestamp.split('-')[2] == d.timestamp.split('-')[2]) {
 					return;
 				};
-				writeToFile(filePath, JSON.stringify(data.push(d)));
+				data.push(d);
+				writeToFile(id, JSON.stringify(data));
 			});			
 		}
 	})	
@@ -75,4 +91,5 @@ var getBookList = function (books, details) {
 
 exports.getBookList = getBookList;
 exports.filterData = getBookDetail;
+exports.readFile = readFile;
 

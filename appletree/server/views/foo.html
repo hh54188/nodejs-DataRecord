@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<title><%= title%></title>
+	</head>
+	<body>
+		<div class="container">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<% if (head) { %>
+							<% for (var i = 0; i < head.length; i++) { %>
+								<th><%= head[i]%></th>		
+							<% } %>
+						<% } %>						
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
+		<h1><%= title%></h1>
+		<h1>Hello World</h1>
+	</body>
+</html>
