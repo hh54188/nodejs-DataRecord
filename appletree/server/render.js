@@ -1,9 +1,36 @@
 var file = require('./file');
+var fs = require('fs');
 
-var findDetail = function (data) {
+var test = function (arr, obj) {
+	var id = arr.shift();
+	obj[id] = {};
+	var filePath = 'file/' + id + '.js';
+	fs.exists(filePath, function (exists) {
+		if (exists) {
+			fs.readFile(filePath, 'utf8', function (err, data) {
+				if (err) {return console.log(err);}
+				data = JSON.parse(data);
+				obj[id] = data;
+				console.log(obj[id]);
+				if (arr.length == 0) {
+					console.log(obj);
+					return
+				};
+				test(arr, obj);
+			})
+		}
+	})
+}
+
+var findDetail = function (data, ouput) {
+	var tmp = [];
 	for (var n in data) {
-		console.log(n);
+		tmp.push(n);
 	}
+	var obj = {}
+	//正式进入
+	test(tmp, obj);
+
 }
 
 var renderhd = function (res) {
