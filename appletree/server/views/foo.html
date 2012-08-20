@@ -16,10 +16,51 @@
 						<% } %>						
 					</tr>
 				</thead>
-				<tbody></tbody>
+				<tbody>
+						<% if (body) { %>
+							<% var count = 0; %>
+							<% for (var j in body) { %>
+								<tr>
+									<td rowspan="2"><%= ++count %></td>
+									<td rowspan="2"><%= body[j].basic.title_sc%></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<% if (body[j].detail) { %> 
+										<% if (body[j].detail[1]) { %> 
+											<td><%= body[j].detail[1].DownLoad%></td>	
+										<% } else {%>
+											<td></td>
+										<% }%>
+									<% } else {%>
+										<td></td>
+									<% }%>
+								</tr>
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<% if (body[j].detail) { %> 
+										<% if (body[j].detail[1]) { %> 
+											<td><%= body[j].detail[1].RmbPrice%></td>	
+										<% } else {%>
+											<td></td>
+										<% }%>
+									<% } else {%>
+										<td></td>
+									<% }%>
+								</tr>
+							<% } %>
+						<% } %>
+				</tbody>
+				<tfoot></tfoot>
 			</table>
 		</div>
-		<h1><%= title%></h1>
-		<h1>Hello World</h1>
 	</body>
 </html>

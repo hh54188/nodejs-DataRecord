@@ -13,7 +13,7 @@ app.configure(function () {
 	app.engine('html', require('ejs').renderFile);	
 })
 app.get('/', function (req, res) {
-	render.renderhd(res);
+	render.initRender(res);
 });
 
 app.listen(9000);

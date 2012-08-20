@@ -28,7 +28,7 @@ var checkIdInList = function (books, list) {
 	writeToFile('booklist', list);
 }
 
-var readFile = function (id, fn) {
+var readFile = function (id, fn, res) {
 	var filePath = 'file/' + id + '.js';
 	fs.exists(filePath, function (exists) {
 		if (exists) {
@@ -37,7 +37,7 @@ var readFile = function (id, fn) {
 				data = JSON.parse(data);
 				//回调函数
 				if (fn) {
-					fn(data)
+					fn(data, res)
 				}
 			})
 		}
