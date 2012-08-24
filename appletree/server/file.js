@@ -59,6 +59,7 @@ var getBookDetail = function (id, d) {
 				var last = data[data.length - 1];
 				var timestamp = last.timestamp;
 				if (timestamp.split('-')[2] == d.timestamp.split('-')[2]) {
+					//如果时间戳没变，则不修改文件
 					return;
 				};
 				data.push(d);

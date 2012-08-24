@@ -2,6 +2,7 @@ var file = require('./file');
 var fs = require('fs');
 
 var dateCount= function (day, month, year) {
+					//0	1   2   3   4   5   6   7   8   9   10  11  12
 	var monthDay = [29, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 	var isLeapYear = function (year) {
 		if ((year%4==0&&year%100!=0)||(year%400==0)) {
@@ -12,27 +13,49 @@ var dateCount= function (day, month, year) {
 	}
 
 	month = month - 1;
+	if (month <= 0) {
+		month = 12;
+		year = year - 1;
+	}
+
 	if (month == 2 && isLeapYear(year)) {
 		day = monthDay[0];
 	} else {
 		day = monthDay[month];	
 	}
+
+	var obj = {
+		day: day,
+		month: month,
+		year: year
+	}
+
+	return obj;
 }
 
 var render = function (data, res) {
-	var d = new Date();
-	var year = parseInt(d.getFullYear()),
-		month = parseInt(d.getMonth()) + 1,
-		today = parseInt(d.getDate().toString());
-	var thead = ['count', 'name'];
-	for (var i = 6; i >= 0 ; i--) {
-		var day = today - i;
-		if (day <= 0) {
-			dateCount(day, month, year);
-		}
-		var day = year.toString() + '-' + month.toString() + '-' + day.toString();
-		thead.push(day)
-	}
+    var d = new Date();
+    var year = parseInt(d.getFullYear()),
+        month = parseInt(d.getMonth()) + 1,
+        today = parseInt(d.getDate().toString());
+    var thead = ['编号', '书名'];
+    var j = 1;
+
+    var day = year.toString() + '-' + month.toString() + '-' + today.toString();
+    thead.push(day);
+    for (var i = 0; i < 6; i++) {
+        var today = today - j;
+        if (today <= 0) {
+            var newDate = dateCount(day, month, year);
+            today = newDate.day;
+            month = newDate.month;
+            year = newDate.year;
+        }
+
+        var day = year.toString() + '-' + month.toString() + '-' + today.toString();
+        thead.push(day);
+    }
+
 	res.render('foo.html', { head: thead, body: data, title: 'Appletree'});
 }
 

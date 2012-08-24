@@ -23,38 +23,40 @@
 								<tr>
 									<td rowspan="2"><%= ++count %></td>
 									<td rowspan="2"><%= body[j].basic.title_sc%></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<% if (body[j].detail) { %> 
-										<% if (body[j].detail[1]) { %> 
-											<td><%= body[j].detail[1].DownLoad%></td>	
-										<% } else {%>
+									<% for (var h = 0 ; h < head.length; h++) { %>
+										<% var flag = 0 %>
+										<% if (head[h] == "编号" || head[h] == "书名" || head[h] == "说明") continue;%>
+										<% if (body[j].detail) { %> 
+											<% var detail = body[j].detail%>
+											<% for (var d = 0; d < detail.length; d++) { %>
+												<% if (detail[d].timestamp == head[h]) { %>
+													<td><%= detail[d].DownLoad %></td>
+													<% flag = 1 %>
+												<% } %>
+											<% } %>
+										<% } %>
+										<% if (flag == 0) { %>
 											<td></td>
-										<% }%>
-									<% } else {%>
-										<td></td>
-									<% }%>
+										<% } %>
+									<% } %>
 								</tr>
 								<tr>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
+								<% for (var h = 0 ; h < head.length; h++) { %>
+									<% var flag = 0 %>
+									<% if (head[h] == "编号" || head[h] == "书名" || head[h] == "说明") continue;%>
 									<% if (body[j].detail) { %> 
-										<% if (body[j].detail[1]) { %> 
-											<td><%= body[j].detail[1].RmbPrice%></td>	
-										<% } else {%>
-											<td></td>
-										<% }%>
-									<% } else {%>
+										<% var detail = body[j].detail%>
+										<% for (var d = 0; d < detail.length; d++) { %>
+											<% if (detail[d].timestamp == head[h]) { %>
+												<td><%= detail[d].RmbPrice %></td>
+												<% flag = 1 %>
+											<% } %>
+										<% } %>
+									<% } %>
+									<% if (flag == 0) { %>
 										<td></td>
-									<% }%>
+									<% } %>
+								<% }%>
 								</tr>
 							<% } %>
 						<% } %>
