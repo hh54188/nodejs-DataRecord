@@ -1,0 +1,1 @@
+[{"timestamp":"2012-8-17","BuyPoint":"0","Price":"0","RmbPrice":"0","DownLoad":"33135","HasBought":"0"},{"timestamp":"2012-8-20","BuyPoint":"0","Price":"0","RmbPrice":"0","DownLoad":"36413","HasBought":"0"},{"timestamp":"2012-8-24","BuyPoint":"0","Price":"0","RmbPrice":"0","DownLoad":"41304","HasBought":"0"}]

@@ -33,6 +33,24 @@ var dateCount= function (day, month, year) {
 	return obj;
 }
 
+var utility = function (detail, todayStamp) {
+	var prev = ""; cur = "";
+	var d = {};
+	for (var i = 0; i < detail.length; i++) {
+		prev = cur;
+		cur = detail[i];
+
+		if (cur.timestamp == todayStamp) {
+			if (!prev || !cur) break;
+			d.price = parseInt(cur.RmbPrice) != parseInt(prev.RmbPrice)? false: true;
+			d.download = parseInt(cur.DownLoad) - parseInt(prev.DownLoad);
+			break;
+		}
+	}
+
+	return d;
+}
+
 var render = function (data, res) {
     var d = new Date();
     var year = parseInt(d.getFullYear()),
@@ -56,7 +74,7 @@ var render = function (data, res) {
         thead.push(day);
     }
 
-	res.render('foo.html', { head: thead, body: data, title: 'Appletree'});
+	res.render('foo.html', { head: thead, body: data, title: 'Appletree', utility: utility});
 }
 
 var collect = function (arr, collection, res) {

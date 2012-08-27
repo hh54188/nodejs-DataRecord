@@ -3,6 +3,15 @@
 	<head>
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 		<title><%= title%></title>
+		<style type="text/css">
+			.default-price {
+				color: gray;
+			}
+			.change-price {
+				color: red;
+				font-weight: bold;
+			}
+		</style>
 	</head>
 	<body>
 		<div class="container">
@@ -10,7 +19,9 @@
 				<thead>
 					<tr>
 						<% if (head) { %>
+						<% var total = [] %>
 							<% for (var i = 0; i < head.length; i++) { %>
+								<% total[i] = 0 %>
 								<th><%= head[i]%></th>		
 							<% } %>
 						<% } %>						
@@ -30,7 +41,13 @@
 											<% var detail = body[j].detail%>
 											<% for (var d = 0; d < detail.length; d++) { %>
 												<% if (detail[d].timestamp == head[h]) { %>
-													<td><%= detail[d].DownLoad %></td>
+ 													<% var diff = utility(detail, head[h]) %>
+ 													<% total[h] += parseInt(detail[d].DownLoad)%>
+													<td><%= detail[d].DownLoad %>
+														<% if (diff && diff.download) { %>
+															(+<%= diff.download %>)
+														<% } %>
+													</td>
 													<% flag = 1 %>
 												<% } %>
 											<% } %>
@@ -48,7 +65,14 @@
 										<% var detail = body[j].detail%>
 										<% for (var d = 0; d < detail.length; d++) { %>
 											<% if (detail[d].timestamp == head[h]) { %>
-												<td><%= detail[d].RmbPrice %></td>
+												<% var diff = utility(detail, head[h]) %>
+												<% if (diff.price) { %>
+													<td class="default-price">	
+												<% } else { %>
+													<td class="change-price">	
+												<% } %>
+													<%= detail[d].RmbPrice %>
+												</td>
 												<% flag = 1 %>
 											<% } %>
 										<% } %>
@@ -61,7 +85,19 @@
 							<% } %>
 						<% } %>
 				</tbody>
-				<tfoot></tfoot>
+				<tfoot>
+					<tr>
+						<% for (var m = 0; m < head.length; m++) { %>
+							<% var d = total[m] - total[m + 1] %>
+							<% if (!isNaN(d) && d > 0) { %>
+								<th><%= total[m]%>(+<%= d %>)</th>	
+							<% } else { %>
+								<th><%= total[m]%></th>	
+							<% } %>
+							
+						<% } %>
+					</tr>	
+				</tfoot>
 			</table>
 		</div>
 	</body>

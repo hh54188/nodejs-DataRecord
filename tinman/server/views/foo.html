@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<title><%= title%></title>
+	</head>
+	<body>
+		<div class="container">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<% if (head) { %>
+							<% for (var i = 0; i < head.length; i++) { %>
+								<th><%= head[i]%></th>		
+							<% } %>
+						<% } %>						
+					</tr>
+				</thead>
+				<tbody>
+						<% if (body) { %>
+							<% var count = 0; %>
+							<% for (var j in body) { %>
+								<tr>
+									<td rowspan="2"><%= ++count %></td>
+									<td rowspan="2"><%= body[j].basic.title_sc%></td>
+									<% for (var h = 0 ; h < head.length; h++) { %>
+										<% var flag = 0 %>
+										<% if (head[h] == "编号" || head[h] == "书名" || head[h] == "说明") continue;%>
+										<% if (body[j].detail) { %> 
+											<% var detail = body[j].detail%>
+											<% for (var d = 0; d < detail.length; d++) { %>
+												<% if (detail[d].timestamp == head[h]) { %>
+													<td><%= detail[d].DownLoad %></td>
+													<% flag = 1 %>
+												<% } %>
+											<% } %>
+										<% } %>
+										<% if (flag == 0) { %>
+											<td></td>
+										<% } %>
+									<% } %>
+								</tr>
+								<tr>
+								<% for (var h = 0 ; h < head.length; h++) { %>
+									<% var flag = 0 %>
+									<% if (head[h] == "编号" || head[h] == "书名" || head[h] == "说明") continue;%>
+									<% if (body[j].detail) { %> 
+										<% var detail = body[j].detail%>
+										<% for (var d = 0; d < detail.length; d++) { %>
+											<% if (detail[d].timestamp == head[h]) { %>
+												<td><%= detail[d].RmbPrice %></td>
+												<% flag = 1 %>
+											<% } %>
+										<% } %>
+									<% } %>
+									<% if (flag == 0) { %>
+										<td></td>
+									<% } %>
+								<% }%>
+								</tr>
+							<% } %>
+						<% } %>
+				</tbody>
+				<tfoot></tfoot>
+			</table>
+		</div>
+	</body>
+</html>
