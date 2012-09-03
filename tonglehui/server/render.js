@@ -33,6 +33,23 @@ var dateCount= function (day, month, year) {
 	return obj;
 }
 
+var utility = function (detail, todayStamp) {
+	var prev = ""; cur = "";
+	var d = {};
+	for (var i = 0; i < detail.length; i++) {
+		prev = cur;
+		cur = detail[i];
+
+		if (cur.timestamp == todayStamp) {
+			if (!prev || !cur) break;
+			d.price = parseInt(cur.price) != parseInt(prev.price)? false: true;
+			d.download = parseInt(cur.downloads) - parseInt(prev.downloads);
+			break;
+		}
+	}
+	return d;
+}
+
 var render = function (data, res) {
     var d = new Date();
     var year = parseInt(d.getFullYear()),
@@ -56,7 +73,7 @@ var render = function (data, res) {
         thead.push(day);
     }
 
-	res.render('foo.html', { head: thead, body: data, title: 'Appletree'});
+	res.render('foo.html', { head: thead, body: data, title: 'Appletree', utility: utility});
 }
 
 var collect = function (arr, collection, res) {
@@ -101,7 +118,16 @@ var collectEach = function (data, res) {
 
 
 var initRender = function (res) {
-	file.readFile('booklist', collectEach, res);	
+	fs.exists('file/book.js', function (exists) {
+		if (!exists) return;
+		fs.readFile('file/book.js', 'utf8', function (err, data) {
+			if (err) {
+				return console.log(err);
+			}
+			origin = JSON.parse(data);
+			render(origin, res);
+		});
+	})	
 }
 
 exports.initRender = initRender;

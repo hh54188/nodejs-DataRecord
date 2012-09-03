@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
 		<title><%= title%></title>
 		<style type="text/css">
 			.default-price {
@@ -20,8 +21,12 @@
 					<tr>
 						<% if (head) { %>
 						<% var total = [] %>
+						<% var paidDown = [] %>
+						<% var paid = [] %>
 							<% for (var i = 0; i < head.length; i++) { %>
 								<% total[i] = 0 %>
+								<% paidDown[i] = 0 %>
+								<% paid[i] = 0 %>
 								<th><%= head[i]%></th>		
 							<% } %>
 						<% } %>						
@@ -72,6 +77,10 @@
 													<td class="change-price">	
 												<% } %>
 													<%= detail[d].RmbPrice %>
+													<% if (parseInt(detail[d].RmbPrice) != 0 && diff.download) { %>
+														<% paidDown[h] += parseInt(diff.download) %>
+														<% paid[h] += parseInt(diff.download) * parseInt(detail[d].RmbPrice) %>
+													<% } %>
 												</td>
 												<% flag = 1 %>
 											<% } %>
@@ -86,19 +95,49 @@
 						<% } %>
 				</tbody>
 				<tfoot>
-					<tr>
+					<tr class="total">
 						<% for (var m = 0; m < head.length; m++) { %>
 							<% var d = total[m] - total[m + 1] %>
-							<% if (!isNaN(d) && d > 0) { %>
+							<% if (m == 1) { %>
+								<th>下载量总计</th>	
+							<% } else if (!isNaN(d) && d > 0) { %>
 								<th><%= total[m]%>(+<%= d %>)</th>	
 							<% } else { %>
 								<th><%= total[m]%></th>	
 							<% } %>
+						<% } %>
+					</tr>
+					<tr class="paidDown">
+						<% for (var n = 0; n < head.length; n++) { %>
+							<% var d = paidDown[n] - paidDown[n + 1] %>
+							<% if (n == 1) { %>
+								<th>付费下载量总计</th>	
+							<% } else if (!isNaN(d) && d > 0) { %>
+								<th><%= paidDown[n]%>(+<%= d %>)</th>	
+							<% } else { %>
+								<th><%= paidDown[n]%></th>	
+							<% } %>
 							
 						<% } %>
-					</tr>	
+					</tr>
+					<tr class="paid">
+						<% for (var n = 0; n < head.length; n++) { %>
+							<% var d = paid[n] - paid[n + 1] %>
+							<% if (n == 1) { %>
+								<th>付费收入总计</th>	
+							<% } else if (!isNaN(d) && d > 0) { %>
+								<th><%= paid[n]%>(+<%= d %>)</th>	
+							<% } else { %>
+								<th><%= paid[n]%></th>	
+							<% } %>
+							
+						<% } %>
+					</tr>
 				</tfoot>
 			</table>
 		</div>
 	</body>
 </html>
+<script type="text/javascript">
+	$('.total, .paidDown, .paid').clone().prependTo($('.table tbody'));
+</script>

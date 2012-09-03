@@ -11,7 +11,7 @@ var toJSON = function (data, filter) {
 		}
 
 		console.log("hi I'm here");
-		console.log(result.Result);
+		console.log(result);
 		// if (filter) {
 		// 	filter(result);	
 		// }

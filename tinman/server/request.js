@@ -3,11 +3,12 @@ var filter = require('./datafilter');
 var parser = require('url');
 
 var init = function (url, toJSON, filter) {
-	var opts = {
-		host: parser.parse(url).host,
-		path: parser.parse(url).path
-	}
-	var req = http.request(opts, function (res) {
+	// var opts = {
+	// 	host: parser.parse(url).host,
+	// 	path: parser.parse(url).path
+	// }
+	console.log(url);
+	var req = http.request(url, function (res) {
 		res.setEncoding('utf8');
 		var data = ""
 		res.on('data', function(d) {
@@ -15,7 +16,8 @@ var init = function (url, toJSON, filter) {
 		})
 
 		res.on('end', function() {
-			toJSON(data, filter);
+			console.log(data);
+			// toJSON(data, filter);
 		})
 	})
 

@@ -11,8 +11,8 @@ var init = function (url, toJSON, filter) {
 		})
 
 		res.on('end', function() {
-			console.log(data);
-			// toJSON(data, filter);
+			// console.log(data);
+			toJSON(data, filter);
 		})
 	})
 

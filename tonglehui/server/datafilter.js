@@ -1,19 +1,9 @@
-
-var xml2js = require('xml2js');
-var parser = new xml2js.Parser();
 var file = require('./file.js');
 
 //toJson
 var toJSON = function (data, filter) {
-	parser.parseString(data, function (err, result) {
-		if (err) {
-			return console.log(err);
-		}
-
-		if (filter) {
-			filter(result);	
-		}
-    });
+	data = JSON.parse(data).data;
+	filter(data);
 }
 
 var isAllow = function (key, list) {
@@ -26,35 +16,36 @@ var isAllow = function (key, list) {
 	return false;
 }
 
+var setTimeStamp = function () {
+	var timestamp = new Date();
+	timestamp = timestamp.getFullYear().toString() + '-' + (parseInt(timestamp.getMonth()) + 1).toString() + '-' + timestamp.getDate().toString();
+	return timestamp;
+}
+
 //filter 
 var filterData = function (data) {
-	var bookKey = ['title_sc', 'ftitle_sc', 'AppDescSC', 'Age', 'Category', 'PublisherSC', 'CategorySC', 'InAppSmallCoverSC', 'ReviewPhoto1', 'FileSize', 'InAppProID'];
-	var detailKey = ['BuyPoint', 'Price', 'RmbPrice', 'DownLoad', 'HasBought']
-	var remoteBooks = data.book;
-	var localBooks = {};
-	var detail = {};
-
-	for (var b = 0; b < remoteBooks.length; b++) {
-		var id = remoteBooks[b].id;
-		localBooks[id] = {};
-		detail[id] = {};
-		for (var p in remoteBooks[b]) {
-			//书的基本信息
+	// console.log(data);
+	var bookKey = ['name', 'desc', 'author', 'icon', 'apple_id', 'created_at', 'age', 'ReviewPhoto1', 'FileSize', 'InAppProID', 'icon_url', 'banner_url', 'screens'];
+	var detailKey = ['price', 'status', 'is_recommended', 'is_banner', 'is_recommended', 'updated_at', 'downloads', 'version', 'column_id', 'user_id', 'order_stamp'];
+	var book = {};
+	for (var d = 0; d < data.length; d++) {
+		book[data[d]["id"]] = {};
+		book[data[d]["id"]].basic = {};
+		book[data[d]["id"]].detail = [];
+		var detail = {};
+		for (var p in data[d]) {
 			if (isAllow(p, bookKey)) {
-				localBooks[id][p] = remoteBooks[b][p];
+				book[data[d]["id"]].basic[p] = data[d][p];
+			} else if (isAllow(p, detailKey)) {
+				detail[p] = data[d][p];
 			}
-			//书的当日信息
-			if (isAllow(p, detailKey)) {
-				detail[id][p] = remoteBooks[b][p];
-			}
+		}
 
-			var timestamp = new Date();
-			timestamp = timestamp.getFullYear().toString() + '-' + (parseInt(timestamp.getMonth()) + 1).toString() + '-' + timestamp.getDate().toString();
-			detail[id]["timestamp"] = timestamp;
-		}		
+		detail["timestamp"] = setTimeStamp();
+		book[data[d]["id"]].detail.push(detail);
 	}
 
-	file.getBookList(localBooks, detail);
+	file.getBookList(book);
 }
 
 exports.toJSON = toJSON;

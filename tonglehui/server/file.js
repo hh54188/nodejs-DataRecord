@@ -9,88 +9,53 @@ var writeToFile = function (file, data) {
 	})
 }
 
-var checkIdInList = function (books, list) {
-	for (var b in books) {
-		var insert = false;
-		for (var l in list) {
-			if (l == b) {
-				//如果有相同的书Id则不用再插入了
-				insert = true;
-				break;
-			}
+var check = function (book, origin) {
+	var flag = 0;
+	for (var i in book) {
+		flag = 0;
+		for (var j in origin) {
+			if (i == j) {
+				flag = 1
+				var len = origin[j].detail.length;
+				if (origin[j].detail[len - 1].timestamp != book[i].detail[0].timestamp) {
+					origin[j].detail.push(book[i].detail[0]);
+				}
+			};
 		}
-		if (!insert) {
-			list[b] = books[b];
+		if (!flag) {
+			origin[i] = book[i];
 		}
 	}
 	
-	list = JSON.stringify(list);
-	writeToFile('booklist', list);
+	origin = JSON.stringify(origin);
+	writeToFile('book', origin);
 }
 
-var readFile = function (id, fn, res) {
-	var filePath = 'file/' + id + '.js';
-	fs.exists(filePath, function (exists) {
-		if (exists) {
-			fs.readFile(filePath, 'utf8', function (err, data) {
-				if (err) {return console.log(err);}
-				data = JSON.parse(data);
-				//回调函数
-				if (fn) {
-					fn(data, res)
-				}
-			})
-		}
-	})
-}
-
-var getBookDetail = function (id, d) {
-	var filePath = 'file/' + id + '.js';
-	fs.exists(filePath, function (exists) {
-		//如果没有该文件，直接写
-		if (!exists) {
-			var tmp = [];
-			tmp.push(d);
-			writeToFile(id, JSON.stringify(tmp));
-		} else {
-			fs.readFile(filePath, 'utf8', function (err, data) {
-				if (err) {return console.log(err);}
-				data = JSON.parse(data);
-				var last = data[data.length - 1];
-				var timestamp = last.timestamp;
-				if (timestamp.split('-')[2] == d.timestamp.split('-')[2]) {
-					//如果时间戳没变，则不修改文件
-					return;
-				};
-				data.push(d);
-				writeToFile(id, JSON.stringify(data));
-			});			
-		}
-	})	
-}
-
-var checkDetail = function (details) {
-	for (var d in details) {
-		getBookDetail(d, details[d]);
-	}
-}
-
-var getBookList = function (books, details) {
-	fs.exists('file/booklist.js', function (exists) {
+var getBookList = function (book) {
+	fs.exists('file/book.js', function (exists) {
 		if (!exists) return;
-		fs.readFile('file/booklist.js', 'utf8', function (err, data) {
+		fs.readFile('file/book.js', 'utf8', function (err, data) {
 			if (err) {
 				return console.log(err);
 			}
-			data = JSON.parse(data);
-			checkIdInList(books, data);
-			checkDetail(details);
+			origin = JSON.parse(data);
+			check(book, origin);
 		});
 	})	
 }
 
+var readFile = function () {
+	fs.exists('file/book.js', function (exists) {
+		if (!exists) return;
+		fs.readFile('file/book.js', 'utf8', function (err, data) {
+			if (err) {
+				return console.log(err);
+			}
+			origin = JSON.parse(data);
+		});
+	})		
+}
+
 
 exports.getBookList = getBookList;
-exports.filterData = getBookDetail;
 exports.readFile = readFile;
-
